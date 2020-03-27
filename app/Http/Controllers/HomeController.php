@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\HotelRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use File;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -15,11 +18,13 @@ class HomeController extends Controller
      * @return void
      */
     protected $repository;
+    protected $hotelRepository;
 
-    public function __construct(Repository $repository)
+    public function __construct(Repository $repository, HotelRepository $hotelRepository)
     {
         $this->middleware('auth');
         $this->repository = $repository;
+        $this->hotelRepository = $hotelRepository;
     }
 
     /**
@@ -39,33 +44,75 @@ class HomeController extends Controller
         return view('add-hotel');
     }
 
-    public function saveHotel(Request $request)
+    public function saveImage(Request $request)
     {
-        $validator = Validator::make($request->all(),
-            [
-                'file' => 'image',
-            ],
-            [
-                'file.image' => 'The file must be an image (jpeg, png, bmp, gif, or svg)'
-            ]);
-        if ($validator->fails())
-            return array(
-                'fail' => true,
-                'errors' => $validator->errors()
-            );
-        $files = [];
-//        dd($request->file());
-        dd(empty($request->file()));
-        if($request->files) {
-            foreach($request->file() as $file) {
-                $dir = 'public/images/';
-                $imagename = $file->getClientOriginalName();
-                dd($imagename);
-                $filename = uniqid() . '_' . time() . '.' . $imagename;
-                $file->move($dir, $filename);
-                $files[] = $dir.$filename;
+//      get Hotel ID
+        $hotelId = $request->input('hotelId');
+
+        /* Getting file name */
+        $filename = $_FILES['file']['name'];
+
+        $path = public_path('images/' . $hotelId . '/');
+        if(!File::isDirectory($path)){
+
+            File::makeDirectory($path, 0777, true, true);
+
+        }
+
+        /* Location */
+        $location = $path .$filename;
+        $uploadOk = 1;
+        $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
+
+        /* Valid Extensions */
+        $valid_extensions = array("jpg","jpeg","png");
+        /* Check file extension */
+        if( !in_array(strtolower($imageFileType),$valid_extensions) ) {
+            $uploadOk = 0;
+        }
+
+        if($uploadOk == 0){
+            echo 0;
+        } else {
+            /* Upload file */
+            if(move_uploaded_file($_FILES['file']['tmp_name'],$location)){
+                echo $location;
+            }else{
+                echo 0;
             }
         }
-        return 'success';
+    }
+
+    public function saveHotelNameAndDescription(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(),
+            [
+                'name' => 'max:50|required',
+                'description' => 'max:300|required',
+                'stars' => 'required',
+                'city' => 'max:30|required',
+                'country' => 'max:30|required',
+                'address' => 'max:100|required'
+            ]);
+            if ($validator->fails())
+                return array(
+                    'fail' => true,
+                    'errors' => $validator->errors()
+                );
+
+            return $this->hotelRepository->addHotel($request->input());
+        } catch (\Exception $e) {
+            return 'error';
+        }
+    }
+
+    public function getHomePage()
+    {
+        $hotels = $this->hotelRepository->hotelsByStars();
+        foreach ($hotels as $hotel) {
+            $hotel->images = glob("images/" .$hotel->h_id . '/*');
+        }
+        return view('home', compact('hotels'));
     }
 }

@@ -10,4 +10,13 @@ class Repository implements RepositoryInterface
             ->where('id', Auth()->user()->id)
             ->first();
     }
+
+    public function getUserById($userId)
+    {
+        return DB::table('users')
+            ->where('id', $userId)
+            ->first();
+    }
+
+
 }

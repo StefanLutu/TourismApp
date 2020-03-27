@@ -21,5 +21,16 @@ return [
     'hotel-name' => 'Numele Hotelului',
     'hotel-description' => 'Descriere',
     'add-picture' => 'Adauga imaginea',
+    'add-pictures-for-your-hotel' => 'Adaugati poze pentru cazarea dumneavoastra',
+    'select-the-image' => 'Selecteaza imaginea',
+    'select-rating' => 'Selecteaza numarul de stele al cazarii dumneavoastra:',
+    'country' => 'Tara',
+    'city' => 'Oras',
+    'address' => 'Adresa',
+    'most-appriciated-hotels' => 'Cele mai apreciate cazari',
+    'learn-more' => 'Afla mai multe',
+    'email' => 'Email',
+    'name' => 'Nume',
+    'phone' => 'Numar de telefon'
 
 ];

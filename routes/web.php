@@ -14,9 +14,7 @@
 //use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@getHomePage');
 
 Auth::routes();
 
@@ -26,4 +24,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/add-hotel', 'HomeController@addHotel');
-Route::post('/save-hotel', 'HomeController@saveHotel');
+Route::get('/profile', 'UserController@getUserProfile');
+
+Route::post('/save-image', 'HomeController@saveImage');
+Route::post('save-hotel', 'HomeController@saveHotelNameAndDescription');
