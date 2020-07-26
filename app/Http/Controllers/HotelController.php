@@ -48,8 +48,8 @@ class HotelController extends Controller
         $hotelData->images = $listOfImages;
 
         try {
-            $aa = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $hotelData->h_city . '&key=AIzaSyA8Kw2if1GnH4Eh7fQS8_4IvfdpbREWL0w';
-            $aaa = ['address' => 'Bucuresti', 'key' => 'AIzaSyA8Kw2if1GnH4Eh7fQS8_4IvfdpbREWL0w'];
+            $aa = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $hotelData->h_city . '&key=key';
+            $aaa = ['address' => 'Bucuresti', 'key' => 'key'];
             $jsonData = CallAPI('POST', $aa, $aaa);
 //            dd();
 //            $hotelData->location = json_decode($jsonData)->results[0]->access_points[0]->location;
