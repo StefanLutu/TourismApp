@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Hotels;
+use App\Booking;
 
 class HotelRepository implements HotelInterface
 {
     public function addHotel($hotelFields)
     {
+//        dd($hotelFields);
         $hotel = new Hotels();
         $hotel->h_name = $hotelFields['name'];
         $hotel->h_description = $hotelFields['description'];
@@ -17,7 +19,9 @@ class HotelRepository implements HotelInterface
         $hotel->h_country = $hotelFields['country'];
         $hotel->h_city = $hotelFields['city'];
         $hotel->h_address = $hotelFields['address'];
+        $hotel->h_price = $hotelFields['price'];
         $hotel->save();
+//        dd($hotel);
         return $hotel->id;
     }
 
@@ -31,4 +35,98 @@ class HotelRepository implements HotelInterface
                 ->get();
         return $hotel;
     }
+
+    public function getHotelsFiltered($data)
+    {
+//        dd($data);
+        $hotel = DB::table('hotels');
+
+        if(!empty($data['nrOfStars'])) {
+            $hotel->where('h_stars', $data['nrOfStars']);
+        }
+
+        if(!empty($data['price'])) {
+            $hotel->where('h_price','<=' ,$data['price']);
+        }
+
+        if(!empty($data['nameOrAddress'])) {
+            $hotel->where('h_name', 'like', '%'. $data['nameOrAddress']. '%')
+                ->orWhere('h_address', 'like', '%'. $data['nameOrAddress']. '%');
+        }
+//        dd($hotel->get());
+        $hotel = $hotel->get();
+
+        $bookedHotels = [];
+        $hotelByDate = DB::table('hotels')
+            ->join('bookings', 'b_h_id', 'h_id')->get();
+
+        if(!empty($data['start']) && !empty($data['end'])) {
+            foreach ($hotelByDate as $key => $itemHotel) {
+                if($itemHotel->b_start_date <= $data['start'] && $itemHotel->b_end_date >= $data['start']) {
+                    if(!in_array($itemHotel->h_id, $bookedHotels)) {
+                        array_push($bookedHotels, $itemHotel->h_id);
+                    }
+                }
+                if($itemHotel->b_start_date <= $data['end'] && $itemHotel->b_end_date >= $data['end']) {
+                    if(!in_array($itemHotel->h_id, $bookedHotels)) {
+                        array_push($bookedHotels, $itemHotel->h_id);
+                    }
+                }
+                if($itemHotel->b_start_date >= $data['start'] && $itemHotel->b_end_date <= $data['end']) {
+                    if(!in_array($itemHotel->h_id, $bookedHotels)) {
+                        array_push($bookedHotels, $itemHotel->h_id);
+                    }
+                }
+            }
+
+            foreach ($hotel as $key => $value) {
+                foreach ($bookedHotels as $bValue) {
+                    if( $value->h_id == $bValue ) {
+                        unset($hotel[$key]);
+                    }
+                }
+            }
+        }
+
+        return $hotel;
+    }
+
+    public function getHotelInfo($hotelId)
+    {
+        $hotel = DB::table('hotels')
+            ->where('h_id', $hotelId)
+            ->first();
+
+        return $hotel;
+    }
+
+    public function makeBooking($data)
+    {
+        try {
+            $booking = new Booking();
+            $booking->b_u_id = $data['userId'];
+            $booking->b_h_id = $data['hotelId'];
+            $booking->b_start_date = $data['start'];
+            $booking->b_end_date = $data['end'];
+            $booking->save();
+            return $booking->id;
+        } catch (\Exception $e) {
+            return 'error';
+        }
+    }
+
+    public function getBookedDatesForHotel($hotelId)
+    {
+        try {
+            $data = DB::table('bookings')
+                ->select('b_id', 'b_start_date', 'b_end_date')
+                ->where('b_h_id', $hotelId)
+                ->get();
+
+            return $data;
+        } catch (\Exception $e) {
+            return 'error';
+        }
+    }
+
 }

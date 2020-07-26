@@ -16,8 +16,26 @@
     border-radius: .25rem;
     align-self: center;
 }
+#search-section {
+    margin-bottom: 25px;
+}
 
-main {
+.input-group {
+    display: inline-block;
+    width: unset;
+    position: relative;
+    margin-left: 10px;
+}
+
+.mb-3 {
+    min-width: 250px;
+}
+
+.input-group>.custom-file, .input-group>.custom-select, .input-group>.form-control {
+    width: 250px;
+}
+
+body {
     background-color: #0070a226;
 }
 

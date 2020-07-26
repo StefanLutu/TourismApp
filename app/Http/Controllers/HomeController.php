@@ -93,7 +93,8 @@ class HomeController extends Controller
                 'stars' => 'required',
                 'city' => 'max:30|required',
                 'country' => 'max:30|required',
-                'address' => 'max:100|required'
+                'address' => 'max:100|required',
+                'price' => 'numeric|required',
             ]);
             if ($validator->fails())
                 return array(
@@ -107,9 +108,18 @@ class HomeController extends Controller
         }
     }
 
-    public function getHomePage()
+    public function getHomePage(Request $request)
     {
-        $hotels = $this->hotelRepository->hotelsByStars();
+        $input = $request->input();
+        if(count($input)) {
+            $hotels = $this->hotelRepository->getHotelsFiltered($input);
+//            dd($input);
+//            dd($hotels);
+//            $hotels = $this->hotelRepository->hotelsByStars();
+        } else {
+            $hotels = $this->hotelRepository->hotelsByStars();
+        }
+
         foreach ($hotels as $hotel) {
             $hotel->images = glob("images/" .$hotel->h_id . '/*');
         }

@@ -12,7 +12,8 @@ input#address{
 }
 
 input#city,
-input#country {
+input#country,
+input#price{
     width: 50%;
     display: block;
     margin: 5px 0 10px 0;

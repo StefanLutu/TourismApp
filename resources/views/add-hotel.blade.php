@@ -23,6 +23,7 @@
                                 </div>
                                 <input type="text" id="country" placeholder="@lang('messages.country')">
                                 <input type="text" id="city" placeholder="@lang('messages.city')">
+                                <input id="price" type="number" min="0" placeholder="@lang('messages.lei-pe-noapte')">
                                 <input type="text" id="address" placeholder="@lang('messages.address')">
                                 <div id="save-hotel">@lang('messages.add-hotel')</div>
                             </div>

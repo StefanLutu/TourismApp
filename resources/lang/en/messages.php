@@ -31,6 +31,23 @@ return [
     'learn-more' => 'Afla mai multe',
     'email' => 'Email',
     'name' => 'Nume',
-    'phone' => 'Numar de telefon'
+    'phone' => 'Numar de telefon',
+    'your-accomodations' => 'Lista cazarilor tale:',
+    'accomodation-description' => 'Informatii utile:',
+    'choose-a-date' => 'Alege un interval',
+    'order-now' => 'Rezerva',
+    'choose-payment-method' => 'Alege modalitatea de plata',
+    'cash' => 'Cash la Check in',
+    'card' => 'Cu cardul - Indisponibil momentan',
+    'options' => 'Optiuni:',
+    'booking-success' => 'Rezervarea a fost facuta cu succes!',
+    'booking-fail' => 'Din pacatre a aparut o eroare. Va rugam incercati mai tarziu!',
+    'modal-map-title' => 'Pozitie',
+    'show-map-pozition' => 'Afiseaza Harta',
+    'user-profile' => 'Profil',
+    'search-hotel' => 'Cauta Cazare',
+    'search' => 'Cauta',
+    'name-or-address' => 'Nume sau locatie',
+    'lei-pe-noapte' => 'Lei / Noapte'
 
 ];

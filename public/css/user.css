@@ -19,8 +19,6 @@ html,body{
 
 }
 .image_inner_container img{
-    height: 200px;
-    width: 200px;
     border-radius: 50%;
     border: 5px solid white;
 }
@@ -48,6 +46,38 @@ html,body{
 
 .form-control {
     background-color: white;
+}
+
+#add-user-img-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+#add-user-img-input + label {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    cursor: pointer;
+}
+
+#add-user-img {
+    width: 35px;
+    height: 35px;
+    border: unset;
+    border-radius: unset;
+    display: none;
+    cursor: pointer;
+    /*background-color: aliceblue;*/
+}
+
+.general-message {
+    padding: 10px 0;
+    display: none;
+    color: deepskyblue;
 }
 
 @media (max-width: 700px) {

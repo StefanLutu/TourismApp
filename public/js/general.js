@@ -1,20 +1,6 @@
-// var images = [], imagesFile = [];
 var image_upload = new FormData();
 var selectedStar,
     hotelId;
-
-// $('#add-picture').on('click', function () {
-//     var inputVal = $('#hotel-img').val();
-//     if(inputVal !== '') {
-//         // bx
-//         inputVal = inputVal.split("\\")[2];
-//         images.push(inputVal);
-//         imagesFile.push($('#hotel-img')[0].files[0]);
-//         image_upload.append(inputVal, $('#hotel-img')[0].files[0]);
-//         // $('#hotel-img').val('');
-//
-//     }
-// });
 
 $('#add-picture').on('click', function ()
 {
@@ -49,7 +35,8 @@ $('#save-hotel').on('click', function () {
         hotelDescription = $('textarea').val(),
         country = $('#country').val(),
         city = $('#city').val(),
-        address = $('#address').val();
+        address = $('#address').val(),
+        price = $('#price').val();
 
     $.ajax({
         url: "/save-hotel",
@@ -63,7 +50,8 @@ $('#save-hotel').on('click', function () {
             stars: selectedStar,
             country: country,
             city: city,
-            address: address
+            address: address,
+            price: price
         },
         success: function(result){
             if(result !== 'error') {

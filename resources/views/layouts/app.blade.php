@@ -10,9 +10,12 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="/js/jquery-3.4.1.min.js"></script>
+{{--    <script src="/js/jquery-3.4.1.min.js"></script>--}}
     <script src="{{ asset('js/app.js') }}"></script>
 {{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>--}}
+
+    <!-- mine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -68,6 +71,10 @@
                                         {{ __('Logout') }}
                                     </a>
 
+                                    <a class="dropdown-item" href="/profile?userId={{ Auth::user()->id }}" >
+                                        @lang('messages.user-profile')
+                                    </a>
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -83,5 +90,7 @@
             @yield('content')
         </main>
     </div>
+
+    @yield('scripts')
 </body>
 </html>
