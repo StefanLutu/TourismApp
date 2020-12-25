@@ -48,6 +48,8 @@ return [
     'search-hotel' => 'Cauta Cazare',
     'search' => 'Cauta',
     'name-or-address' => 'Nume sau locatie',
-    'lei-pe-noapte' => 'Lei / Noapte'
+    'lei-pe-noapte' => 'Lei / Noapte',
+    'edit-accommodation' => 'Modifica cazare',
+    'price' => 'Pret'
 
 ];

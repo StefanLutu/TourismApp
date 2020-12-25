@@ -26,10 +26,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/add-hotel', 'HomeController@addHotel');
 Route::get('/profile', 'UserController@getUserProfile');
 Route::get('accomodation', 'HotelController@viewHotel');
+Route::get('/edit-accommodation', 'HotelController@editHotelPage');
 
 Route::post('/save-image', 'HomeController@saveImage');
 Route::post('save-hotel', 'HomeController@saveHotelNameAndDescription');
 Route::post('/save-profile-picture', 'UserController@uploadProfilePicture');
 Route::post('/update-user-data', 'UserController@updateUserData');
 Route::post('make-booking', 'HotelController@makeBooking');
+Route::post('/edit-accommodation' , 'HotelController@saveHotelDerailsOnEdit')->name('edit-accommodation-post');
 

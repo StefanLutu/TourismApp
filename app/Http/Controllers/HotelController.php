@@ -51,8 +51,6 @@ class HotelController extends Controller
             $aa = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $hotelData->h_city . '&key=AIzaSyA8Kw2if1GnH4Eh7fQS8_4IvfdpbREWL0w';
             $aaa = ['address' => 'Bucuresti', 'key' => 'AIzaSyA8Kw2if1GnH4Eh7fQS8_4IvfdpbREWL0w'];
             $jsonData = CallAPI('POST', $aa, $aaa);
-//            dd();
-//            $hotelData->location = json_decode($jsonData)->results[0]->access_points[0]->location;
             $hotelData->location = json_decode($jsonData)->results[0]->geometry->location;
         } catch (\Exception $e) {
             $hotelData->location = 'error';
@@ -80,6 +78,37 @@ class HotelController extends Controller
         }
 
         return $this->hotelRepository->makeBooking($request->input());
+    }
+
+    public function editHotelPage(Request $request)
+    {
+        if(!empty($request->input('hotel'))) {
+            $hotelId = $request->input('hotel');
+        }
+
+        $hotelData = $this->hotelRepository->getHotelInfo($hotelId);
+        $hotelData->bookings = $this->hotelRepository->getBookedDatesForHotel($hotelId);
+        $listOfImages = [];
+
+        $paths = public_path('images/' . $hotelId . '/');
+        $filesInFolder = \File::files($paths);
+        foreach ($filesInFolder as $file) {
+            $fileName = pathinfo($file)['basename'];
+            array_push($listOfImages, $fileName);
+        }
+
+
+        $hotelData->images = $listOfImages;
+
+        return view('editHotel', compact('hotelData'));
+    }
+
+    public function saveHotelDerailsOnEdit(Request $request)
+    {
+        $updatedStatus = $this->hotelRepository->editHotel($request->input());
+        if($updatedStatus === true) {
+            return redirect()->back();
+        }
     }
 }
 

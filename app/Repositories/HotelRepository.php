@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use http\Env\Request;
 use Illuminate\Support\Facades\DB;
 use App\Hotels;
 use App\Booking;
@@ -10,7 +11,6 @@ class HotelRepository implements HotelInterface
 {
     public function addHotel($hotelFields)
     {
-//        dd($hotelFields);
         $hotel = new Hotels();
         $hotel->h_name = $hotelFields['name'];
         $hotel->h_description = $hotelFields['description'];
@@ -21,14 +21,31 @@ class HotelRepository implements HotelInterface
         $hotel->h_address = $hotelFields['address'];
         $hotel->h_price = $hotelFields['price'];
         $hotel->save();
-//        dd($hotel);
+
         return $hotel->id;
+    }
+
+    public function editHotel($hotelFields)
+    {
+        try {
+            $fieldsToUpdate = [];
+            foreach ($hotelFields as $field => $value) {
+                if (!empty($value) && $field != 'hotel-id' && $field != '_token') {
+                    $fieldsToUpdate[$field] = $value;
+                }
+            }
+
+            Hotels::where('h_id', $hotelFields['hotel-id'])
+                ->update($fieldsToUpdate);
+            return true;
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     public function hotelsByStars()
     {
         $hotel = DB::table('hotels')
-//                ->where('h_stars', 5)
                 ->orderBy( 'h_stars','desc')
                 ->orderBy( 'created_at','desc')
                 ->limit(5)
@@ -38,7 +55,6 @@ class HotelRepository implements HotelInterface
 
     public function getHotelsFiltered($data)
     {
-//        dd($data);
         $hotel = DB::table('hotels');
 
         if(!empty($data['nrOfStars'])) {
@@ -53,7 +69,7 @@ class HotelRepository implements HotelInterface
             $hotel->where('h_name', 'like', '%'. $data['nameOrAddress']. '%')
                 ->orWhere('h_address', 'like', '%'. $data['nameOrAddress']. '%');
         }
-//        dd($hotel->get());
+
         $hotel = $hotel->get();
 
         $bookedHotels = [];
