@@ -104,7 +104,7 @@ class HomeController extends Controller
 
             return $this->hotelRepository->addHotel($request->input());
         } catch (\Exception $e) {
-            return 'error';
+            return $e->getMessage();
         }
     }
 
